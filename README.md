@@ -6,4 +6,6 @@ A demo for ZMQ Asynchronous DEALER <-> ROUTER + ROUTER <-> DEALER that supports 
 
 Run `router.py` first then start any number of `client.py`. `router.py` will start `worker.py` once a new client is connected to it. `client.py` can be stopped using `Ctrl-C` and will inform `router.py` that it will terminate so corresponding worker will stop.
 
+# Note
 
+This is only compatible with Python 3
