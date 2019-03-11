@@ -1,31 +1,8 @@
+import subprocess
 import threading
 import time
 
 import zmq
-
-
-# Client Class
-class Client(threading.Thread):
-    def __init__(self, id):
-        threading.Thread.__init__(self)
-        self.id = ("client-"+str(id))
-
-    def run(self):
-        context = zmq.Context()
-        socket = context.socket(zmq.DEALER)
-        socket.identity = self.id.encode("ascii")
-        socket.connect("tcp://localhost:5580")
-        print(self.id + " started")
-        while True:
-            # Send
-            socket.send(("Hello from " + self.id).encode())
-            # Receive
-            msg = socket.recv_string()
-            print(self.id + " received: " + msg)
-
-        print("Stopping client " + str(self.id))
-        socket.close()
-        context.term()
 
 
 # ROUTER class
@@ -46,13 +23,9 @@ class Router(threading.Thread):
         poller = zmq.Poller()
         poller.register(frontend, zmq.POLLIN)
         poller.register(backend, zmq.POLLIN)
-        
-        # Init Workers
-        for i in range(3):
-            worker = Worker(i)
-            worker.start()
 
         # Routing
+        print("Router Started")
         while True:
             sockets = dict(poller.poll())
             if backend in sockets:
@@ -60,48 +33,23 @@ class Router(threading.Thread):
                 frontend.send_multipart([clientID, msg])
             if frontend in sockets:
                 clientID, msg = frontend.recv_multipart()
+                # Start Worker
+                if msg.decode() == "Client Ready":
+                    print(clientID.decode() + "is ready. Starting worker...")
+                    subprocess.Popen(["python3", "worker.py", (clientID).decode().split('-')[1]])
+                time.sleep(0.5)
                 workerID = ("worker-" + (clientID).decode().split('-')[1]).encode()
                 backend.send_multipart([workerID, clientID, msg])
             time.sleep(1)
 
+        # Clean Up
         print("Closing router")
         front.close()
         back.close()
         context.term()
 
 
-# Worker Class
-class Worker(threading.Thread):
-    def __init__(self, id):
-        threading.Thread.__init__(self)
-        self.id = ("worker-"+str(id))
-
-    def run(self):
-        # Init socket
-        context = zmq.Context()
-        socket = context.socket(zmq.DEALER)
-        socket.identity = self.id.encode("ascii")
-        socket.connect("tcp://localhost:5581")
-        
-        print(self.id + " started")
-        while True:
-            # Receive
-            client, msg = socket.recv_multipart()
-            print(self.id + " received: " + str(msg, 'utf-8'))
-            # Send
-            socket.send_multipart([client, ("World from " + self.id).encode()])
-        
-        print("Stopping worker " + str(self.id))
-        socket.close()
-        context.term()
-
 # Main
 if __name__ == "__main__":
     router = Router()
     router.start()
-    time.sleep(1)
-    for i in range(3):
-        client = Client(i)
-        client.start()
-
-    router.join()
