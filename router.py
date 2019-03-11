@@ -35,10 +35,10 @@ class Router(threading.Thread):
                 clientID, msg = frontend.recv_multipart()
                 # Start Worker
                 if msg.decode() == "Client Ready":
-                    print(clientID.decode() + "is ready. Starting worker...")
-                    subprocess.Popen(["python3", "worker.py", (clientID).decode().split('-')[1]])
+                    print(clientID.decode() + " is ready. Starting worker...")
+                    subprocess.Popen(["python3", "worker.py", (clientID).decode().split('_')[1]])
                 time.sleep(0.5)
-                workerID = ("worker-" + (clientID).decode().split('-')[1]).encode()
+                workerID = ("worker_" + (clientID).decode().split('_')[1]).encode()
                 backend.send_multipart([workerID, clientID, msg])
             time.sleep(1)
 

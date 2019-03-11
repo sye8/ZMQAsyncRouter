@@ -9,7 +9,7 @@ import zmq
 class Worker(threading.Thread):
     def __init__(self, id):
         threading.Thread.__init__(self)
-        self.id = ("worker-"+str(id))
+        self.id = ("worker_"+str(id))
 
     def run(self):
         # Init socket
@@ -26,12 +26,14 @@ class Worker(threading.Thread):
             # Send
             if msg.decode() == "Client Ready":
                 socket.send_multipart([client, ("Worker Ready").encode()])
+            if msg.decode() == "Client Stopping":
+                break
             else:
                 socket.send_multipart([client, ("World from " + self.id).encode()])
             print("")
         
         # Clean Up
-        print("Stopping worker " + str(self.id))
+        print("Stopping " + str(self.id))
         socket.close()
         context.term()
 

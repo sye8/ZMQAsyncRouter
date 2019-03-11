@@ -1,3 +1,5 @@
+import signal
+import sys
 import threading
 import time
 import uuid
@@ -9,9 +11,10 @@ import zmq
 class Client(threading.Thread):
     def __init__(self, id):
         threading.Thread.__init__(self)
-        self.id = ("client-"+str(id))
+        self.id = ("client_"+str(id))
 
     def run(self):
+        # Connect
         context = zmq.Context()
         socket = context.socket(zmq.DEALER)
         socket.identity = self.id.encode("ascii")
@@ -21,8 +24,10 @@ class Client(threading.Thread):
         workerIsStarted = False
         print("Waiting for worker...")
         
+        self.isStarted = True
+        
         # Run Loop
-        while True:
+        while self.isStarted:
             # Wait for worker
             while not workerIsStarted:
                 socket.send(("Client Ready").encode())
@@ -37,15 +42,46 @@ class Client(threading.Thread):
             # Receive
             msg = socket.recv_string()
             print(self.id + " received: " + msg + "\n")
+            
             time.sleep(1)
 
         # Clean Up
-        print("Stopping client " + str(self.id))
+        print("Dear worker, I don't feel so good")
+        print("Stopping " + str(self.id) + "\n")
+        socket.send(("Client Stopping").encode())
+        socket.close()
+        context.term()
+
+            
+    # Send a single message to worker
+    def send(self, msg):
+        # Connect
+        context = zmq.Context()
+        socket = context.socket(zmq.DEALER)
+        socket.identity = self.id.encode("ascii")
+        socket.connect("tcp://localhost:5580")
+        
+        # Send Msg
+        socket.send(msg.encode())
+        
+        # Clean Up
         socket.close()
         context.term()
 
 
-# Main
-if __name__ == "__main__":
+def main():
     client = Client(uuid.uuid4())
     client.start()
+
+    def signal_handler(*args):
+        print("\n\nReceived SIGINT")
+        client.isStarted = False
+        client.join()
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
+
+
+# Main
+if __name__ == "__main__":
+    main()
