@@ -15,3 +15,7 @@ Run `router.py` first then play `demo` Unity scene. The light will switch on and
 # Note
 
 This is only compatible with Python 3
+
+For `System.Threading.Tasks` to be accessible, set editor to .NET 4.6
+
+`File -> Build Settings -> Player Settings... -> Other Settings -> Scripting Runtime Version -> Experimental (.NET 4.6 Equivalent)`
