@@ -16,6 +16,8 @@ public class Client : MonoBehaviour {
 	private bool dealerIsStarted = false;
 
 	async void dealerListener(){
+		AsyncIO.ForceDotNet.Force();
+
 		var socket = new DealerSocket();
 		socket.Options.Identity = Encoding.UTF8.GetBytes("client_" + System.Guid.NewGuid().ToString());
 		socket.Connect("tcp://localhost:5580");
