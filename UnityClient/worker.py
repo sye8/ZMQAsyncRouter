@@ -34,7 +34,7 @@ class Worker(threading.Thread):
                 break
             else:
                 print(msg.decode())
-                socket.send_multipart([client, (random.choice(colors).encode())])
+                socket.send_multipart([client, (random.choice(self.colors).encode())])
             print("")
         
         # Clean Up
