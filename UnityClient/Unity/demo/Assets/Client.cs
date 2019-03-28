@@ -24,7 +24,7 @@ public class Client : MonoBehaviour
 
         var socket = new DealerSocket();
         socket.Options.Identity = Encoding.UTF8.GetBytes("client_" + System.Guid.NewGuid().ToString());
-        socket.Connect("tcp://172.24.1.1:5580");
+		socket.Connect("tcp://45.56.102.215:5580");
 
         try
         {
@@ -79,28 +79,21 @@ public class Client : MonoBehaviour
     {
         Color newColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);   // white (default)
         // Parsing color from server code
-        if (string.Equals("red", colorStr))
-        {
-            newColor = new Color(1.0f, 0f, 0f, 1.0f);  // red
-        }
-        else if (string.Equals("green", colorStr))
-        {
-            newColor = new Color(0f, 1.0f, 0f, 1.0f); // green
-        }
-        else if (string.Equals("blue", colorStr))
-        {
-            newColor = new Color(0f, 0f, 1.0f, 1.0f); // blue
-        }
-        else if (string.Equals("yellow", colorStr))
-        {
-            newColor = new Color(1.0f, 0.92f, 0.016f, 1.0f); // yellow
-        }
-        else if (string.Equals("magenta", colorStr))
-        {
-            newColor = new Color(1f, 0f, 1.0f, 1.0f); // mangeta
-        }
-        else
-        {
+		if (string.Equals ("red", colorStr)) {
+			newColor = new Color (1.0f, 0f, 0f, 1.0f);  // red
+		} else if (string.Equals ("green", colorStr)) {
+			newColor = new Color (0f, 1.0f, 0f, 1.0f); // green
+		} else if (string.Equals ("blue", colorStr)) {
+			newColor = new Color (0f, 0f, 1.0f, 1.0f); // blue
+		} else if (string.Equals ("yellow", colorStr)) {
+			newColor = new Color (1.0f, 0.92f, 0.016f, 1.0f); // yellow
+		} else if (string.Equals ("magenta", colorStr)) {
+			newColor = new Color (1f, 0f, 1.0f, 1.0f); // mangeta
+		} else if (string.Eqals ("while", colorStr)) {
+			newColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);   // white
+		}else if (string.Equals ("Worker Ready", colorStr)) {
+			newColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);   // white (default)
+		} else {
             Debug.Log("Color " + colorStr + " undefined. Using black.");
             newColor = new Color(0f, 0f, 0f, 1.0f);   // black
         }

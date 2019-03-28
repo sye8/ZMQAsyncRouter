@@ -271,8 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69b6fb4334d9b44f9953bc5f0ba9b23c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 1229039169}
-  lightIsOn: 0
+  DraggableCube: {fileID: 0}
 --- !u!1 &1239295954
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,6 +283,7 @@ GameObject:
   - component: {fileID: 1239295957}
   - component: {fileID: 1239295956}
   - component: {fileID: 1239295955}
+  - component: {fileID: 1239295959}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -357,3 +357,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1239295959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1239295954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69b6fb4334d9b44f9953bc5f0ba9b23c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DraggableCube: {fileID: 1239295955}
