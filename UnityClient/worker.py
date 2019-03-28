@@ -30,12 +30,12 @@ class Worker(threading.Thread):
             # Send
             if msg.decode() == "Client Ready":
                 socket.send_multipart([client, ("Worker Ready").encode()])
-                print(self.id + "sent: Worker Ready")
+                print(self.id + " sent: Worker Ready")
             elif msg.decode() == "Client Stopping":
                 break
             else:
                 socket.send_multipart([client, (random.choice(self.colors).encode())])
-                print(self.id + "sent: " + random.choice(self.colors))
+                print(self.id + " sent: " + random.choice(self.colors))
             print("")
         
         # Clean Up
