@@ -1,3 +1,4 @@
+import random
 import sys
 import threading
 import time
@@ -7,6 +8,9 @@ import zmq
 
 # Worker Class
 class Worker(threading.Thread):
+    
+    colors = ["red", "green", "blue", "yellow", "magenta"]
+    
     def __init__(self, id):
         threading.Thread.__init__(self)
         self.id = ("worker_"+str(id))
@@ -28,12 +32,9 @@ class Worker(threading.Thread):
                 socket.send_multipart([client, ("Worker Ready").encode()])
             elif msg.decode() == "Client Stopping":
                 break
-            elif msg.decode() == "Light is off":
-                socket.send_multipart([client, ("on").encode()])
-            elif msg.decode() == "Light is on":
-                socket.send_multipart([client, ("off").encode()])
             else:
-                socket.send_multipart([client, ("Hello from " + self.id).encode()])
+                print(msg.decode())
+                socket.send_multipart([client, (random.choice(colors).encode())])
             print("")
         
         # Clean Up
