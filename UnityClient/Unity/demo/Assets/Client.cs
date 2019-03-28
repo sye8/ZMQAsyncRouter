@@ -89,7 +89,7 @@ public class Client : MonoBehaviour
 			newColor = new Color (1.0f, 0.92f, 0.016f, 1.0f); // yellow
 		} else if (string.Equals ("magenta", colorStr)) {
 			newColor = new Color (1f, 0f, 1.0f, 1.0f); // mangeta
-		} else if (string.Eqals ("while", colorStr)) {
+		} else if (string.Equals ("while", colorStr)) {
 			newColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);   // white
 		}else if (string.Equals ("Worker Ready", colorStr)) {
 			newColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);   // white (default)
