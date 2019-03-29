@@ -34,8 +34,9 @@ class Worker(threading.Thread):
             elif msg.decode() == "Client Stopping":
                 break
             else:
-                socket.send_multipart([client, (random.choice(self.colors).encode())])
-                print(self.id + " sent: " + random.choice(self.colors))
+                color = random.choice(self.colors)
+                socket.send_multipart([client, (color.encode())])
+                print(self.id + " sent: " + color)
             print("")
         
         # Clean Up
