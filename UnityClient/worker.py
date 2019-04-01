@@ -38,7 +38,7 @@ class Worker(threading.Thread):
                 toSend = random.choice(self.colors)
             toSend = str(calendar.timegm(time.gmtime())) + " " + toSend
             socket.send_multipart([client, (toSend.encode())])
-            print(self.id + " sent: " + color)
+            print(self.id + " sent: " + toSend)
             print("")
         
         # Clean Up
