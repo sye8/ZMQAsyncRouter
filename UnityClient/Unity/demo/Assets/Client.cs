@@ -39,7 +39,9 @@ public class Client : MonoBehaviour
                     string m;
                     if (socket.TryReceiveFrameString(TimeSpan.FromSeconds(3), out m))
                     {
-                        if (m == "Worker Ready")
+                        string[] parts = m.Split(' ');
+                        Debug.Log("Delay: " + ((long)(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) - Convert.ToInt64(parts[0])));
+                        if (parts[1] == "Worker Ready")
                         {
                             Debug.Log("Worker Ready");
                             workerIsStarted = true;
