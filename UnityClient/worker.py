@@ -27,16 +27,17 @@ class Worker(threading.Thread):
             # Receive
             client, msg = socket.recv_multipart()
             print(self.id + " received: " + str(msg, 'utf-8'))
+            toSend = ""
             # Send
             if msg.decode() == "Client Ready":
-                socket.send_multipart([client, ("Worker Ready").encode()])
-                print(self.id + " sent: Worker Ready")
+                toSend = "Worker Ready"
             elif msg.decode() == "Client Stopping":
                 break
             else:
-                color = random.choice(self.colors)
-                socket.send_multipart([client, (color.encode())])
-                print(self.id + " sent: " + color)
+                toSend = random.choice(self.colors)
+            toSend = str(timestamp = calendar.timegm(time.gmtime())) + " " + toSend
+            socket.send_multipart([client, (toSend.encode())])
+            print(self.id + " sent: " + color)
             print("")
         
         # Clean Up
