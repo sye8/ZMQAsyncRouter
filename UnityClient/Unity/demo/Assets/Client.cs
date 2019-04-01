@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,7 +53,7 @@ public class Client : MonoBehaviour
                     Debug.Log("Received: " + msg);
                     string[] parts = msg.Split(' ');
                     Debug.Log("Delay: " + ((long)(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) - Convert.ToInt64(parts[0])));
-                    colorStr = string[1];
+                    colorStr = parts[1];
                     socket.SendFrame("Will change color to " + msg);
                 }
                 await Task.Delay(500);
