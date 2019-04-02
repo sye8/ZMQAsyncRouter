@@ -22,7 +22,9 @@ public class Client : MonoBehaviour
     public Renderer DraggableCube;
 
     // Get UNIX Timestamp in Milliseconds
-    
+	private long CurrentUNIXTimeStampMilliseconds(){
+		return (long) (DateTime.UtcNow - UnixEpoch).TotalMilliseconds;
+	}
 
     async void dealerListener()
     {
@@ -45,7 +47,7 @@ public class Client : MonoBehaviour
                     if (socket.TryReceiveFrameString(TimeSpan.FromSeconds(3), out m))
                     {
                         string[] parts = m.Split(' ');
-                        Debug.Log("Delay: " + ((DateTimeOffset.UtcNow.ToUnixTimeSeconds()) - Convert.ToDouble(parts[0])));
+						Debug.Log("Delay: " + (CurrentUNIXTimeStampMilliseconds() - Convert.ToInt64(parts[0])));
                         m = string.Join(" ", parts.Skip(1));
                         if (string.Equals(m, "Worker Ready"))
                         {
@@ -60,7 +62,7 @@ public class Client : MonoBehaviour
                 {
                     Debug.Log("Received: " + msg);
                     string[] parts = msg.Split(' ');
-                    Debug.Log("Delay: " + ((DateTimeOffset.UtcNow.ToUnixTimeSeconds()) - Convert.ToDouble(parts[0])));
+					Debug.Log("Delay: " + (CurrentUNIXTimeStampMilliseconds() - Convert.ToInt64(parts[0])));
                     colorStr = parts[1];
                     socket.SendFrame("Will change color to " + msg);
                 }
