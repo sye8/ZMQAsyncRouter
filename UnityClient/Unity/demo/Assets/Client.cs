@@ -15,9 +15,14 @@ public class Client : MonoBehaviour
     // For async router comm
     private string colorStr = "";
     private bool dealerIsStarted = false;
+    // For ping
+    private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
     // For color changing
     public Renderer DraggableCube;
+
+    // Get UNIX Timestamp in Milliseconds
+    
 
     async void dealerListener()
     {
@@ -40,8 +45,9 @@ public class Client : MonoBehaviour
                     if (socket.TryReceiveFrameString(TimeSpan.FromSeconds(3), out m))
                     {
                         string[] parts = m.Split(' ');
-                        Debug.Log("Delay: " + ((long)(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) - Convert.ToInt64(parts[0])));
-                        if (parts[1] == "Worker Ready")
+                        Debug.Log("Delay: " + ((DateTimeOffset.UtcNow.ToUnixTimeSeconds()) - Convert.ToDouble(parts[0])));
+                        m = string.Join(" ", parts.Skip(1));
+                        if (string.Equals(m, "Worker Ready"))
                         {
                             Debug.Log("Worker Ready");
                             workerIsStarted = true;
@@ -54,7 +60,7 @@ public class Client : MonoBehaviour
                 {
                     Debug.Log("Received: " + msg);
                     string[] parts = msg.Split(' ');
-                    Debug.Log("Delay: " + ((long)(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) - Convert.ToInt64(parts[0])));
+                    Debug.Log("Delay: " + ((DateTimeOffset.UtcNow.ToUnixTimeSeconds()) - Convert.ToDouble(parts[0])));
                     colorStr = parts[1];
                     socket.SendFrame("Will change color to " + msg);
                 }
