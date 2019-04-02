@@ -40,7 +40,6 @@ class Router(threading.Thread):
                 time.sleep(0.5)
                 workerID = ("worker_" + (clientID).decode().split('_')[1]).encode()
                 backend.send_multipart([workerID, clientID, msg])
-            time.sleep(1)
 
         # Clean Up
         print("Closing router")
