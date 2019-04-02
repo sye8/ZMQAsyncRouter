@@ -1,4 +1,3 @@
-import datetime
 import random
 import sys
 import threading
@@ -36,7 +35,7 @@ class Worker(threading.Thread):
                 break
             else:
                 toSend = random.choice(self.colors)
-            toSend = str(int(datetime.datetime.utcnow().timestamp()*1000)) + " " + toSend
+            toSend = str(int(time.time()*1000)) + " " + toSend
             socket.send_multipart([client, (toSend.encode())])
             print(self.id + " sent: " + toSend)
             print("")
